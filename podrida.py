@@ -7,13 +7,6 @@ from openpyxl.styles import PatternFill, Border, Side, Alignment, Protection, Fo
 #Cuantos jugadores?
 #En que orden estan sentados?
 #Sube de a 1 hasta el max y baja de a 1
-#
-#
-##############
-#players = input("How many players? ")
-#players = int(players)
-#zprint(players)
-
 ##############
 
 players = input("How many players? ")
@@ -70,10 +63,45 @@ for y in range(1,players + 1,1):
     hechas.append(cw2)
     puntos.append(cw)
 
-
 lastrow = 2 * maxcards + players + 2
 lastcol = 3 * players + 2
 
+
+##FUNCTIONALITY###
+
+
+if players == 6:
+    for i in range(1, lastrow, 1):
+        newi = str(i)
+        n1 = pedidas[0] + newi
+        n2 = pedidas[1] + newi
+        n3 = pedidas[2] + newi
+        n4 = pedidas[3] + newi
+        n5 = pedidas[4] + newi
+        n6 = pedidas[5] + newi
+        m1 = hechas[0] + newi
+        m2 = hechas[1] + newi
+        m3 = hechas[2] + newi
+        m4 = hechas[3] + newi
+        m5 = hechas[4] + newi
+        m6 = hechas[5] + newi
+        sheet.cell(row = i, column = lastcol).value = "=SUM({},{},{},{},{},{})".format(n1,n2,n3,n4,n5,n6)
+        sheet.cell(row = i, column = lastcol+1).value = "=SUM({},{},{},{},{},{})".format(m1,m2,m3,m4,m5,m6)
+
+    for i in range(len(puntos)):
+        b = column_index_from_string(puntos[i])
+        aa = puntos[i] + '2'
+        bb = pedidas[i] + '2'
+        cc = hechas[i] + '2'
+        sheet.cell(row = 2, column = b).value = "=IF(ISBLANK({}),,IF({}={},10+2*{},{}))".format(cc,cc,bb,bb,cc)
+        for z in range (3,lastrow, 1):
+            newz = str(z)
+            oldz = str(z-1)
+            oldpun = puntos[i] + oldz
+            pun = puntos[i] + newz
+            ped = pedidas[i] + newz
+            hec = hechas[i] + newz
+            sheet.cell(row = z, column = b).value = "=IF(ISBLANK({}),,IF({}={},{}+10+2*{},{}+{}))".format(hec,hec,ped,oldpun,ped,oldpun,hec)
 
 if players == 5:
     for i in range(1, lastrow, 1):
@@ -92,29 +120,23 @@ if players == 5:
         sheet.cell(row = i, column = lastcol).value = "=SUM({},{},{},{},{})".format(n1,n2,n3,n4,n5)
         sheet.cell(row = i, column = lastcol+1).value = "=SUM({},{},{},{},{})".format(m1,m2,m3,m4,m5)
 
-#cip = []
-#cih = []
-#cipu = []
-#for i in range(len(pedidas)):
-#    x = pedidas[i]
-#    y = column_index_from_string(x)
-#    cip.append(y)
-#for i in range(len(hechas)):
-#    x = hechas[i]
-#    y = column_index_from_string(x)
-#    cih.append(y)
-#for i in range(len(puntos)):
-#    x = puntos[i]
-#    y = column_index_from_string(x)
-#    cipu.append(y)
-#print(cip)
-#print(cih)
-#print(cipu)
+if players == 4:
+    for i in range(1, lastrow, 1):
+        newi = str(i)
+        n1 = pedidas[0] + newi
+        n2 = pedidas[1] + newi
+        n3 = pedidas[2] + newi
+        n4 = pedidas[3] + newi
+        m1 = hechas[0] + newi
+        m2 = hechas[1] + newi
+        m3 = hechas[2] + newi
+        m4 = hechas[3] + newi
 
+        sheet.cell(row = i, column = lastcol).value = "=SUM({},{},{},{})".format(n1,n2,n3,n4)
+        sheet.cell(row = i, column = lastcol+1).value = "=SUM({},{},{},{})".format(m1,m2,m3,m4)
 
 sheet.cell(row = 1, column = lastcol).value = "Basas Pedidas"
 sheet.cell(row = 1, column = lastcol +1).value = "Basas Completas"
-
 
 #BORDERS#
 
@@ -138,7 +160,6 @@ thin_border2 = Border(left=Side(style='none'),
                      top=Side(style='thick'),
                      bottom=Side(style='thick'))
 
-
 for z in range(1,lastrow+1,1):
     for j in range(1, players + 1, 1):
             sheet.cell(row = z, column = 3 * j - 1).border = thin_border
@@ -154,37 +175,7 @@ for j in range(1, players + 1, 1):
     sheet.cell(row = lastrow, column = 3 * j + 1).border = thick_border1
 sheet.cell(row = lastrow, column = 1).border = thick_border1
 
-#    sheet.cell(row = lastrow - 1, column = i).border = thick_border1
-#    sheet.cell(row = lastrow, column = i).border = thick_border1
 #BORDERS#
-
-
-##FUNCTIONALITY###
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #Preparing Workbook#
-
 workbook.save(filename = "Trial1.xlsx")
 print("Enjoy Playing!")
