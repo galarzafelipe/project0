@@ -1,5 +1,4 @@
 #Podrida#
-
 from openpyxl import Workbook
 from openpyxl.utils import get_column_letter, FORMULAE, column_index_from_string
 from openpyxl.styles import PatternFill, Border, Side, Alignment, Protection, Font
@@ -9,8 +8,10 @@ from openpyxl.styles import PatternFill, Border, Side, Alignment, Protection, Fo
 #Sube de a 1 hasta el max y baja de a 1
 ##############
 
-players = input("How many players? ")
+players = input("Cuantos jugadores?")
+gamemode = input("Que tipo de juego? Opciones: 1.Pares y Impares 2.Impares y Pares 3.Juego completo")
 players = int(players)
+gamemode = int(gamemode)
 maxcards = int(52 / players)
 reductor = maxcards + 1
 players = int(players)
@@ -23,55 +24,108 @@ for num in numseparator:
         evens.append(num)
     else:
         odd.append(num)
-print(evens)
-print(odd)
-
+nums = numseparator[0:-1]
+nums = nums[::-1]
+reven = evens[::-1]
+rodd = odd[::-1]
+lastcol = 3 * players + 2
 for i in range(players):
     p = input("Please enter Player {}:".format(i + 1))
     playerList.append(p)
-print(playerList)
 
-##########OPCIONES###
-####Que tipo de juego
-##Reparte?
-#Activate Workbook#
 workbook = Workbook()
 sheet = workbook.active
 align = Alignment(horizontal = 'left', vertical = 'center')
 pedidas = []
 hechas = []
 puntos = []
+
 #Preparing Workbook#
-for x in range(1,maxcards + 1,1):
-    sheet.cell(row = x + 1, column = 1).value = x
-    sheet.cell(row = x + 1, column = 1).alignment = align
-    sheet.cell(row = maxcards + players + x + 1, column = 1).value = abs(x - reductor)
-    sheet.cell(row = maxcards + players + x + 1, column = 1).alignment = align
-for y in range(1,players + 1,1):
-    sheet.cell(row = 1, column = 3*y-1).value = playerList[y - 1]
-    sheet.cell(row = 1, column = 3*y-1).font = Font(bold = True)
-    sheet.cell(row = 1, column = 3*y).value = "P?"
-    cw = get_column_letter(3*y-1)
-    cw1 = get_column_letter(3*y)
-    sheet.column_dimensions[cw1].width = 4
-    sheet.cell(row = 1, column = 3*y+1).value = "H?"
-    cw2 = get_column_letter(3*y+1)
-    sheet.column_dimensions[cw2].width = 4
-    sheet.cell(row = y + maxcards + 1, column = 1).value = "{} ST".format(maxcards)
-    sheet.cell(row = 2 * maxcards + players + 2, column = 1).value = "Puntos"
-    sheet.cell(row = 2 * maxcards + players + 3, column = 1).value = "Puestos"
-    pedidas.append(cw1)
-    hechas.append(cw2)
-    puntos.append(cw)
+if gamemode == 3:
+    fhalf = int(len(numseparator))
+    lhalf = int(len(nums))
+    lastrow = fhalf + lhalf + players + 2
+    for x in range(len(numseparator)):
+        sheet.cell(row = x + 2, column = 1).value = numseparator[x]
+        sheet.cell(row = x + 2, column = 1).alignment = align
+    for y in range(len(nums)):
+        sheet.cell(row = fhalf + players + y + 2, column = 1).value = nums[y]
+        sheet.cell(row = fhalf + players + y + 2, column = 1).alignment = align
+    for y in range(1,players + 1,1):
+        sheet.cell(row = 1, column = 3*y-1).value = playerList[y - 1]
+        sheet.cell(row = 1, column = 3*y-1).font = Font(bold = True)
+        sheet.cell(row = 1, column = 3*y).value = "P?"
+        cw = get_column_letter(3*y-1)
+        cw1 = get_column_letter(3*y)
+        sheet.column_dimensions[cw1].width = 4
+        sheet.cell(row = 1, column = 3*y+1).value = "H?"
+        cw2 = get_column_letter(3*y+1)
+        sheet.column_dimensions[cw2].width = 4
+        sheet.cell(row = y + fhalf + 1, column = 1).value = "{} ST".format(maxcards)
+        sheet.cell(row = fhalf + lhalf + players + 2, column = 1).value = "Puntos"
+        sheet.cell(row = fhalf + lhalf + players + 3, column = 1).value = "Puestos"
+        pedidas.append(cw1)
+        hechas.append(cw2)
+        puntos.append(cw)
 
-lastrow = 2 * maxcards + players + 2
-lastcol = 3 * players + 2
+if gamemode == 1:
+    fhalf = int(len(evens))
+    lhalf = int(len(odd))
+    lastrow = fhalf + lhalf + players + 2
+    for x in range(len(evens)):
+        sheet.cell(row = x + 2, column = 1).value = evens[x]
+        sheet.cell(row = x + 2, column = 1).alignment = align
+    for y in range(len(odd)):
+        sheet.cell(row = fhalf + players + y + 2, column = 1).value = rodd[y]
+        sheet.cell(row = fhalf + players + y + 2, column = 1).alignment = align
+    for y in range(1,players + 1,1):
+        sheet.cell(row = 1, column = 3*y-1).value = playerList[y - 1]
+        sheet.cell(row = 1, column = 3*y-1).font = Font(bold = True)
+        sheet.cell(row = 1, column = 3*y).value = "P?"
+        cw = get_column_letter(3*y-1)
+        cw1 = get_column_letter(3*y)
+        sheet.column_dimensions[cw1].width = 4
+        sheet.cell(row = 1, column = 3*y+1).value = "H?"
+        cw2 = get_column_letter(3*y+1)
+        sheet.column_dimensions[cw2].width = 4
+        sheet.cell(row = y + fhalf + 1, column = 1).value = "{} ST".format(maxcards)
+        sheet.cell(row = fhalf + lhalf + players + 2, column = 1).value = "Puntos"
+        sheet.cell(row = fhalf + lhalf + players + 3, column = 1).value = "Puestos"
+        pedidas.append(cw1)
+        hechas.append(cw2)
+        puntos.append(cw)
 
-sheet.cell(row = 1, column = lastcol).value = "Basas Pedidas"
-sheet.cell(row = 1, column = lastcol +1).value = "Basas Completas"
+    sheet.cell(row = 1, column = lastcol).value = "Basas Pedidas"
+    sheet.cell(row = 1, column = lastcol +1).value = "Basas Completas"
+
+if gamemode == 2:
+    fhalf = int(len(odd))
+    lhalf = int(len(odd))
+    lastrow = fhalf + lhalf + players + 2
+    for x in range(len(odd)):
+        sheet.cell(row = x + 2, column = 1).value = odd[x]
+        sheet.cell(row = x + 2, column = 1).alignment = align
+    for y in range(len(evens)):
+        sheet.cell(row = fhalf + players + y + 2, column = 1).value = reven[y]
+        sheet.cell(row = fhalf + players + y + 2, column = 1).alignment = align
+    for y in range(1,players + 1,1):
+        sheet.cell(row = 1, column = 3*y-1).value = playerList[y - 1]
+        sheet.cell(row = 1, column = 3*y-1).font = Font(bold = True)
+        sheet.cell(row = 1, column = 3*y).value = "P?"
+        cw = get_column_letter(3*y-1)
+        cw1 = get_column_letter(3*y)
+        sheet.column_dimensions[cw1].width = 4
+        sheet.cell(row = 1, column = 3*y+1).value = "H?"
+        cw2 = get_column_letter(3*y+1)
+        sheet.column_dimensions[cw2].width = 4
+        sheet.cell(row = y + fhalf + 1, column = 1).value = "{} ST".format(maxcards)
+        sheet.cell(row = fhalf + lhalf + players + 2, column = 1).value = "Puntos"
+        sheet.cell(row = fhalf + lhalf + players + 3, column = 1).value = "Puestos"
+        pedidas.append(cw1)
+        hechas.append(cw2)
+        puntos.append(cw)
 
 #BORDERS#
-
 thin_border = Border(left=Side(style='none'),
                      right=Side(style='thin'),
                      top=Side(style='none'),
@@ -110,11 +164,7 @@ for j in range(1, players + 1, 1):
     sheet.cell(row = lastrow+1, column = 3 * j + 1).border = thick_border1
 sheet.cell(row = lastrow, column = 1).border = thick_border1
 sheet.cell(row = lastrow+1, column = 1).border = thick_border1
-
 #BORDERS#
-
-
-
 ##FUNCTIONALITY###
 if players == 6:
     for i in range(1, lastrow, 1):
@@ -219,6 +269,12 @@ if players == 4:
             hec = hechas[i] + newz
             sheet.cell(row = z, column = b).value = "=IF(ISBLANK({}),,IF({}={},{}+10+2*{},{}+{}))".format(hec,hec,ped,oldpun,ped,oldpun,hec)
 
+sheet.cell(row = 1, column = lastcol).value = "Basas Pedidas"
+lastone = get_column_letter(lastcol)
+sheet.column_dimensions[lastone].width = 15
+sheet.cell(row = 1, column = lastcol +1).value = "Basas Completas"
+lastone1 = get_column_letter(lastcol + 1)
+sheet.column_dimensions[lastone1].width = 15
 #Preparing Workbook#
 workbook.save(filename = "Trial1.xlsx")
 print("Enjoy Playing!")
