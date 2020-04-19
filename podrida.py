@@ -64,6 +64,7 @@ if gamemode == 3:
         sheet.cell(row = y + fhalf + 1, column = 1).value = "{} ST".format(maxcards)
         sheet.cell(row = fhalf + lhalf + players + 2, column = 1).value = "Puntos"
         sheet.cell(row = fhalf + lhalf + players + 3, column = 1).value = "Puestos"
+        sheet.merge_cells(start_row=fhalf + lhalf + players + 3,start_column=3*y-1, end_row=fhalf + lhalf + players + 3, end_column = 3*y+1)
         pedidas.append(cw1)
         hechas.append(cw2)
         puntos.append(cw)
@@ -91,6 +92,7 @@ if gamemode == 1:
         sheet.cell(row = y + fhalf + 1, column = 1).value = "{} ST".format(maxcards)
         sheet.cell(row = fhalf + lhalf + players + 2, column = 1).value = "Puntos"
         sheet.cell(row = fhalf + lhalf + players + 3, column = 1).value = "Puestos"
+        sheet.merge_cells(start_row=fhalf + lhalf + players + 3,start_column=3*y-1, end_row=fhalf + lhalf + players + 3, end_column = 3*y+1)
         pedidas.append(cw1)
         hechas.append(cw2)
         puntos.append(cw)
@@ -121,6 +123,7 @@ if gamemode == 2:
         sheet.cell(row = y + fhalf + 1, column = 1).value = "{} ST".format(maxcards)
         sheet.cell(row = fhalf + lhalf + players + 2, column = 1).value = "Puntos"
         sheet.cell(row = fhalf + lhalf + players + 3, column = 1).value = "Puestos"
+        sheet.merge_cells(start_row=fhalf + lhalf + players + 3,start_column=3*y-1, end_row=fhalf + lhalf + players + 3, end_column = 3*y+1)
         pedidas.append(cw1)
         hechas.append(cw2)
         puntos.append(cw)
@@ -183,7 +186,6 @@ if players == 6:
         m6 = hechas[5] + newi
         sheet.cell(row = i, column = lastcol).value = "=SUM({},{},{},{},{},{})".format(n1,n2,n3,n4,n5,n6)
         sheet.cell(row = i, column = lastcol+1).value = "=SUM({},{},{},{},{},{})".format(m1,m2,m3,m4,m5,m6)
-
     for i in range(len(puntos)):
         b = column_index_from_string(puntos[i])
         aa = puntos[i] + '2'
@@ -201,6 +203,25 @@ if players == 6:
             ped = pedidas[i] + newz
             hec = hechas[i] + newz
             sheet.cell(row = z, column = b).value = "=IF(ISBLANK({}),,IF({}={},{}+10+2*{},{}+{}))".format(hec,hec,ped,oldpun,ped,oldpun,hec)
+    lrz = str(lastrow)
+    p1 = puntos[0] + lrz
+    p2 = puntos[1] + lrz
+    p3 = puntos[2] + lrz
+    p4 = puntos[3] + lrz
+    p5 = puntos[4] + lrz
+    p6 = puntos[5] + lrz
+    sheet.cell(row = lastrow+1, column = 2).value = "=RANK({},({},{},{},{},{},{}),0)".format(p1,p1,p2,p3,p4,p5,p6)
+    sheet.cell(row = lastrow+1, column = 5).value = "=RANK({},({},{},{},{},{},{}),0)".format(p2,p1,p2,p3,p4,p5,p6)
+    sheet.cell(row = lastrow+1, column = 8).value = "=RANK({},({},{},{},{},{},{}),0)".format(p3,p1,p2,p3,p4,p5,p6)
+    sheet.cell(row = lastrow+1, column = 11).value = "=RANK({},({},{},{},{},{},{}),0)".format(p4,p1,p2,p3,p4,p5,p6)
+    sheet.cell(row = lastrow+1, column = 14).value = "=RANK({},({},{},{},{},{},{}),0)".format(p5,p1,p2,p3,p4,p5,p6)
+    sheet.cell(row = lastrow+1, column = 17).value = "=RANK({},({},{},{},{},{},{}),0)".format(p6,p1,p2,p3,p4,p5,p6)
+    sheet.cell(start_row = lastrow+1,start_column = 2, end_row=lastrow+1, end_column=5).alignment = align
+    sheet.cell(row = lastrow+1, column = 5).alignment = align
+    sheet.cell(row = lastrow+1, column = 8).alignment = align
+    sheet.cell(row = lastrow+1, column = 11).alignment = align
+    sheet.cell(row = lastrow+1, column = 14).alignment = align
+    sheet.cell(row = lastrow+1, column = 17).alignment = align
 
 if players == 5:
     for i in range(1, lastrow, 1):
@@ -236,6 +257,22 @@ if players == 5:
             ped = pedidas[i] + newz
             hec = hechas[i] + newz
             sheet.cell(row = z, column = b).value = "=IF(ISBLANK({}),,IF({}={},{}+10+2*{},{}+{}))".format(hec,hec,ped,oldpun,ped,oldpun,hec)
+    lrz = str(lastrow)
+    p1 = puntos[0] + lrz
+    p2 = puntos[1] + lrz
+    p3 = puntos[2] + lrz
+    p4 = puntos[3] + lrz
+    p5 = puntos[4] + lrz
+    sheet.cell(row = lastrow+1, column = 2).value = "=RANK({},({},{},{},{},{}),0)".format(p1,p1,p2,p3,p4,p5)
+    sheet.cell(row = lastrow+1, column = 5).value = "=RANK({},({},{},{},{},{}),0)".format(p2,p1,p2,p3,p4,p5)
+    sheet.cell(row = lastrow+1, column = 8).value = "=RANK({},({},{},{},{},{}),0)".format(p3,p1,p2,p3,p4,p5)
+    sheet.cell(row = lastrow+1, column = 11).value = "=RANK({},({},{},{},{},{}),0)".format(p4,p1,p2,p3,p4,p5)
+    sheet.cell(row = lastrow+1, column = 14).value = "=RANK({},({},{},{},{},{}),0)".format(p5,p1,p2,p3,p4,p5)
+    sheet.cell(row = lastrow+1, column = 2).alignment = align
+    sheet.cell(row = lastrow+1, column = 5).alignment = align
+    sheet.cell(row = lastrow+1, column = 8).alignment = align
+    sheet.cell(row = lastrow+1, column = 11).alignment = align
+    sheet.cell(row = lastrow+1, column = 14).alignment = align
 
 if players == 4:
     for i in range(1, lastrow, 1):
@@ -268,13 +305,33 @@ if players == 4:
             ped = pedidas[i] + newz
             hec = hechas[i] + newz
             sheet.cell(row = z, column = b).value = "=IF(ISBLANK({}),,IF({}={},{}+10+2*{},{}+{}))".format(hec,hec,ped,oldpun,ped,oldpun,hec)
+        lrz = str(lastrow)
+        p1 = puntos[0] + lrz
+        p2 = puntos[1] + lrz
+        p3 = puntos[2] + lrz
+        p4 = puntos[3] + lrz
+        sheet.cell(row = lastrow+1, column = 2).value = "=RANK({},({},{},{},{}),0)".format(p1,p1,p2,p3,p4)
+        sheet.cell(row = lastrow+1, column = 5).value = "=RANK({},({},{},{},{}),0)".format(p2,p1,p2,p3,p4)
+        sheet.cell(row = lastrow+1, column = 8).value = "=RANK({},({},{},{},{}),0)".format(p3,p1,p2,p3,p4)
+        sheet.cell(row = lastrow+1, column = 11).value = "=RANK({},({},{},{},{}),0)".format(p4,p1,p2,p3,p4)
+        sheet.cell(row = lastrow+1, column = 2).alignment = align
+        sheet.cell(row = lastrow+1, column = 5).alignment = align
+        sheet.cell(row = lastrow+1, column = 8).alignment = align
+        sheet.cell(row = lastrow+1, column = 11).alignment = align
 
 sheet.cell(row = 1, column = lastcol).value = "Basas Pedidas"
 lastone = get_column_letter(lastcol)
+bpsum = lastone + '2'
+endsum = str(lastrow - 1)
+bpsum1 = lastone + endsum
 sheet.column_dimensions[lastone].width = 15
+sheet.cell(row = lastrow, column = lastcol).value = "=SUM({}:{})".format(bpsum, bpsum1)
 sheet.cell(row = 1, column = lastcol +1).value = "Basas Completas"
 lastone1 = get_column_letter(lastcol + 1)
-sheet.column_dimensions[lastone1].width = 15
+sheet.column_dimensions[lastone1].width = 17
+bhsum = lastone1 + '2'
+bhsum1 = lastone1 + endsum
+sheet.cell(row = lastrow, column = lastcol+1).value = "=SUM({}:{})".format(bhsum, bhsum1)
 #Preparing Workbook#
 workbook.save(filename = "Trial1.xlsx")
 print("Enjoy Playing!")
