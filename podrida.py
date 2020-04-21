@@ -10,6 +10,7 @@ from openpyxl.styles import PatternFill, Border, Side, Alignment, Protection, Fo
 
 players = input("Cuantos jugadores?")
 gamemode = input("Que tipo de juego? Opciones: 1.Pares y Impares 2.Impares y Pares 3.Juego completo")
+st = input("Se termina con una mano con triunfo?(Si o No)")
 players = int(players)
 gamemode = int(gamemode)
 maxcards = int(52 / players)
@@ -28,6 +29,15 @@ nums = numseparator[0:-1]
 nums = nums[::-1]
 reven = evens[::-1]
 rodd = odd[::-1]
+if st == 'Si':
+    mxc = str(maxcards)
+    y = mxc + " CT"
+    reven.append(y)
+    rodd.append(y)
+    nums.append(y)
+    print(reven)
+    print(rodd)
+    print(nums)
 lastcol = 3 * players + 2
 for i in range(players):
     p = input("Please enter Player {}:".format(i + 1))
@@ -71,12 +81,12 @@ if gamemode == 3:
 
 if gamemode == 1:
     fhalf = int(len(evens))
-    lhalf = int(len(odd))
+    lhalf = int(len(rodd))
     lastrow = fhalf + lhalf + players + 2
     for x in range(len(evens)):
         sheet.cell(row = x + 2, column = 1).value = evens[x]
         sheet.cell(row = x + 2, column = 1).alignment = align
-    for y in range(len(odd)):
+    for y in range(len(rodd)):
         sheet.cell(row = fhalf + players + y + 2, column = 1).value = rodd[y]
         sheet.cell(row = fhalf + players + y + 2, column = 1).alignment = align
     for y in range(1,players + 1,1):
@@ -102,12 +112,12 @@ if gamemode == 1:
 
 if gamemode == 2:
     fhalf = int(len(odd))
-    lhalf = int(len(odd))
+    lhalf = int(len(reven))
     lastrow = fhalf + lhalf + players + 2
     for x in range(len(odd)):
         sheet.cell(row = x + 2, column = 1).value = odd[x]
         sheet.cell(row = x + 2, column = 1).alignment = align
-    for y in range(len(evens)):
+    for y in range(len(reven)):
         sheet.cell(row = fhalf + players + y + 2, column = 1).value = reven[y]
         sheet.cell(row = fhalf + players + y + 2, column = 1).alignment = align
     for y in range(1,players + 1,1):
@@ -204,6 +214,7 @@ if players == 6:
             hec = hechas[i] + newz
             sheet.cell(row = z, column = b).value = "=IF(ISBLANK({}),,IF({}={},{}+10+2*{},{}+{}))".format(hec,hec,ped,oldpun,ped,oldpun,hec)
     lrz = str(lastrow)
+    lrza = str(lastrow + 1)
     p1 = puntos[0] + lrz
     p2 = puntos[1] + lrz
     p3 = puntos[2] + lrz
@@ -216,12 +227,6 @@ if players == 6:
     sheet.cell(row = lastrow+1, column = 11).value = "=RANK({},({},{},{},{},{},{}),0)".format(p4,p1,p2,p3,p4,p5,p6)
     sheet.cell(row = lastrow+1, column = 14).value = "=RANK({},({},{},{},{},{},{}),0)".format(p5,p1,p2,p3,p4,p5,p6)
     sheet.cell(row = lastrow+1, column = 17).value = "=RANK({},({},{},{},{},{},{}),0)".format(p6,p1,p2,p3,p4,p5,p6)
-    sheet.cell(start_row = lastrow+1,start_column = 2, end_row=lastrow+1, end_column=5).alignment = align
-    sheet.cell(row = lastrow+1, column = 5).alignment = align
-    sheet.cell(row = lastrow+1, column = 8).alignment = align
-    sheet.cell(row = lastrow+1, column = 11).alignment = align
-    sheet.cell(row = lastrow+1, column = 14).alignment = align
-    sheet.cell(row = lastrow+1, column = 17).alignment = align
 
 if players == 5:
     for i in range(1, lastrow, 1):
